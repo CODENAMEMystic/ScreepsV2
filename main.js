@@ -1,6 +1,7 @@
 var roleMiner = require('role.miner');
 var roleTransport = require('role.transport');
 var roleRecovery = require('role.recovery');
+var roleUpgrader = require('role.upgrader');
 
 var debug = false;
 
@@ -30,21 +31,28 @@ module.exports.loop = function () { //Runs every tick
         if(creep.memory.role == 'recovery') {
             roleRecovery.run(creep)
         }
+        if(creep.memory.role == 'upgrader') {
+            roleUpgrader.run(creep)
+        }
 
         
     }
     var minimumNumberOfMiners = 3;
-    var minimumNumberOfTransport = 1;
+    var minimumNumberOfTransport = 2;
+    var minimumNumberOfUpgraders = 2;
     
     var numberOfMiners = _.sum(Game.creeps, (c) => c.memory.role == 'miner');
     var numberOfTransport = _.sum(Game.creeps, (c) => c.memory.role == 'transport');
+    var numberOfUpgraders = _.sum(Game.creeps, (c) => c.memory.role == 'upgrader');
     var numberOfRecovery = _.sum(Game.creeps, (c) => c.memory.role == 'recovery');
     
     if (numberOfMiners == 0 || numberOfTransport == 0 && numberOfRecovery < 3 )
     {
         console.log("Oh no! Not enough miners or transport! Spawning recovery")
-        //Game.spawns['Spawn1'].spawnCreep( [WORK, CARRY, MOVE], Game.time, {memory: {role: 'recovery'}});
+        Game.spawns['Spawn1'].spawnCreep( [WORK, CARRY, MOVE], Game.time, {memory: {role: 'recovery'}});
     }
+
+    
     //Check every 5 ticks
     if (Game.time % 5 == 0) {
         if (minimumNumberOfMiners > numberOfMiners) {
@@ -54,6 +62,11 @@ module.exports.loop = function () { //Runs every tick
         if (minimumNumberOfTransport > numberOfTransport) {
             console.log("Not enough transporters. Attempting to spawn transport");
             Game.spawns['Spawn1'].spawnCreep( [MOVE, CARRY, MOVE, CARRY], Game.time, {memory: {role: 'transport', working: "false"}});
+        }
+        
+        if (minimumNumberOfUpgraders > numberOfUpgraders) {
+            console.log("Not enough upgraders. Attempting to spawn upgrader");
+            Game.spawns['Spawn1'].spawnCreep( [WORK, MOVE, CARRY], Game.time, {memory: {role: 'upgrader', working: 'false'}});
         }
         
         

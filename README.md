@@ -1,4 +1,4 @@
-# ScreepsV2 - [v0.1.0]
+# ScreepsV2 - [v0.1.1]
 2017 Ground Up Build
 - All code found here can be used freely for any means. This all was developed by me for the game Screeps
 - Screeps.com
@@ -12,7 +12,9 @@ ___
 
 ___
 ### All [v0.1.0] Patch Changes:
-- Uploaded main.js and role.harvester.js
+- Added upgrader role
+- Fixed miner not switching to work and collect resources
+- Added creep debug chat bubbles
 
 ### Known Bugs:
 - N/A
@@ -25,8 +27,9 @@ ___
 - Created Recovery role
 - Created automatic respawning
 
-## Version: 0.1.0
+## Version: 0.1.1
 - main.js
 - role.miner.js
 - role.recovery.js
 - role.transport.js
+- role.upgrader.js
