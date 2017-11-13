@@ -10,11 +10,7 @@ var roleMiner = {
             creep.memory.working = false;
         }
         
-        else if (creep.memory.working == false && creep.carry.energy == 0)
-        {
-            creep.say(" Work")
-            creep.memory.working = true;
-        }
+        
         if (creep.memory.working == true)
         {
             
