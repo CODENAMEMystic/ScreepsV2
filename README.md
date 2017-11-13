@@ -11,10 +11,8 @@ ___
 
 
 ___
-### All [v0.1.2] Patch Changes:
-- Modified recovery creeps to be able to pick up dropped resources as well as mine them
-- Added builder role
-- Added upgrader role
+### All [v0.1.3] Patch Changes:
+- Fixed prototype spawning
 
 ### Known Bugs:
 - N/A
