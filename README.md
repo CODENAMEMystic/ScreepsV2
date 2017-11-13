@@ -1,4 +1,4 @@
-# ScreepsV2 - [v0.1.2]
+# ScreepsV2 - [v0.1.3]
 2017 Ground Up Build
 - All code found here can be used freely for any means. This all was developed by me for the game Screeps
 - Screeps.com
