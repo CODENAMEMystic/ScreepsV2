@@ -15,10 +15,10 @@ var roleMiner = {
         {
             
             var sources = creep.room.find(FIND_SOURCES); //change later to be creep specific location
-            
-            if(creep.harvest(sources[0]) == ERR_NOT_IN_RANGE)
+            var test = creep.memory.wPos;
+            if(creep.harvest(sources[test]) == ERR_NOT_IN_RANGE)
             {
-                creep.moveTo(sources[0]);
+                creep.moveTo(sources[test]);
             }
         }
         

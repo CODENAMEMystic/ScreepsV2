@@ -5,14 +5,15 @@ var roleRecovery = {
 	    if(creep.carry.energy < creep.carryCapacity) {
             var droppedSources = creep.pos.findInRange(FIND_DROPPED_RESOURCES, 50);
             var roomSources = creep.room.find(FIND_SOURCES);
-            if (energy.length) {
-                creep.moveTo(energy[0]);
-                creep.pickup(energy[0]);
+            creep.say("RECOVER!")
+            if (droppedSources.length) {
+                creep.moveTo(droppedSources[0]);
+                creep.pickup(droppedSources[0]);
             }
             else {
-                if(creep.harvest(sources[0]) == ERR_NOT_IN_RANGE)
+                if(creep.harvest(roomSources[0]) == ERR_NOT_IN_RANGE)
                 {
-                creep.moveTo(sources[0]);
+                creep.moveTo(roomSources[0]);
                 }
             }
         }
