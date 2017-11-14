@@ -33,8 +33,12 @@ var roleTransport = {
                              && s.energy < s.energyCapacity
             });
             
+            
             if (structure == undefined) {
-                structure = creep.room.storage;
+                structure = creep.pos.findClosestByPath(FIND_STRUCTURES, {
+                    filter: (s) => (s.structureType == STRUCTURE_CONTAINER
+                                && s.store[RESOURCE_ENERGY] < s.storeCapacity
+                )});
             }
             
             if (structure != undefined) {

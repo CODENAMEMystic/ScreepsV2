@@ -20,9 +20,9 @@ module.exports.loop = function () { //Runs every tick
     }
     
     var minimumNumberOfMiners = 7;
-    var minimumNumberOfTransport = 2;
-    var minimumNumberOfUpgraders = 1;
-    var minimumNumberOfBuilders = 5;
+    var minimumNumberOfTransport = 3;
+    var minimumNumberOfUpgraders = 7;
+    var minimumNumberOfBuilders = 1;
     var minimumNumberOfRepairers = 2;
     
     var numberOfMiners = _.sum(Game.creeps, (c) => c.memory.role == 'miner');
@@ -37,6 +37,7 @@ module.exports.loop = function () { //Runs every tick
         var creep = Game.creeps[name];
 //------------Role Statements--------------------        
         //if creeps role is miner
+        
         if(creep.memory.role == 'miner') {
             roleMiner.run(creep)
         }
@@ -109,6 +110,7 @@ module.exports.loop = function () { //Runs every tick
             console.log("Not enough repairers. Attempting to spawn Repairer");
             name = Game.spawns['Spawn1'].createCustomCreepU(energy, 'repairer');
         }
+        
         
         
     }
