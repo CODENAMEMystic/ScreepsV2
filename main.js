@@ -20,10 +20,10 @@ module.exports.loop = function () { //Runs every tick
         }
     }
     
-    var minimumNumberOfMiners = 7;
-    var minimumNumberOfTransport = 3;
-    var minimumNumberOfUpgraders = 7;
-    var minimumNumberOfBuilders = 3;
+    var minimumNumberOfMiners = 7; //good
+    var minimumNumberOfTransport = 3; //okay
+    var minimumNumberOfUpgraders = 4; //downsize?
+    var minimumNumberOfBuilders = 3; //okay
     var minimumNumberOfRepairers = 2;
     var minimumNumberOfWallRepairers = 2;
     
@@ -61,6 +61,7 @@ module.exports.loop = function () { //Runs every tick
         if(creep.memory.role == 'builder')
         {
             roleBuilder.run(creep)
+            
         }
         if(creep.memory.role == 'repairer'){
             roleRepairer.run(creep)

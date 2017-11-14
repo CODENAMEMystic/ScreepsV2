@@ -23,10 +23,11 @@ module.exports = function() {
     StructureSpawn.prototype.createCustomCreepT =
         function(energy, roleName, recoveryMode) {
             // create a balanced body as big as possible with the given energy
-            var numberOfParts = Math.floor(energy / 100);
+            var numberOfParts = Math.floor(energy / 150);
 
             var body = [];
             for (let i = 0; i < numberOfParts; i++) {
+                body.push(CARRY);
                 body.push(CARRY);
             }
             for (let i = 0; i < numberOfParts; i++) {
