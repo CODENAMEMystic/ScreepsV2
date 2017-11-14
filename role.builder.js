@@ -27,6 +27,18 @@ module.exports = {
         }
 
         else {
+            creep.say("Oh")
+            
+            structure = creep.pos.findClosestByPath(FIND_STRUCTURES, {
+                    filter: (s) => (s.structureType == STRUCTURE_CONTAINER
+                )});
+            if (structure != undefined) {
+                // try to transfer energy, if it is not in range
+                if(creep.withdraw(structure, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
+                creep.moveTo(structure)
+            }
+            }
+            
             
             var energy = creep.pos.findInRange(
                 FIND_DROPPED_RESOURCES,

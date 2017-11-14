@@ -5,6 +5,7 @@ var roleRecovery = require('role.recovery');
 var roleUpgrader = require('role.upgrader');
 var roleBuilder = require('role.builder');
 var roleRepairer = require('role.repairer');
+var roleWallRepairer = require('role.wallRepairer');
 
 var debug = false;
 
@@ -22,8 +23,9 @@ module.exports.loop = function () { //Runs every tick
     var minimumNumberOfMiners = 7;
     var minimumNumberOfTransport = 3;
     var minimumNumberOfUpgraders = 7;
-    var minimumNumberOfBuilders = 1;
+    var minimumNumberOfBuilders = 3;
     var minimumNumberOfRepairers = 2;
+    var minimumNumberOfWallRepairers = 2;
     
     var numberOfMiners = _.sum(Game.creeps, (c) => c.memory.role == 'miner');
     var numberOfTransport = _.sum(Game.creeps, (c) => c.memory.role == 'transport');
@@ -31,6 +33,7 @@ module.exports.loop = function () { //Runs every tick
     var numberOfRecovery = _.sum(Game.creeps, (c) => c.memory.role == 'recovery');
     var numberOfBuilders = _.sum(Game.creeps, (c) => c.memory.role == 'builder');
     var numberOfRepairers = _.sum(Game.creeps, (c) => c.memory.role == 'repairer');
+    var numberOfWallRepairers = _.sum(Game.creeps, (c) => c.memory.role == 'wallRepairer');
     
     // Run for every spawned creep
     for(var name in Game.creeps) {
@@ -61,6 +64,9 @@ module.exports.loop = function () { //Runs every tick
         }
         if(creep.memory.role == 'repairer'){
             roleRepairer.run(creep)
+        }
+        if(creep.memory.role == 'wallRepairer'){
+            roleWallRepairer.run(creep)
         }
 
         
@@ -109,6 +115,10 @@ module.exports.loop = function () { //Runs every tick
         if (minimumNumberOfRepairers > numberOfRepairers) {
             console.log("Not enough repairers. Attempting to spawn Repairer");
             name = Game.spawns['Spawn1'].createCustomCreepU(energy, 'repairer');
+        }
+        if (minimumNumberOfWallRepairers > numberOfWallRepairers) {
+            console.log("Not enough wall repairers. Attempting to spawn Repairer");
+            name = Game.spawns['Spawn1'].createCustomCreepU(energy, 'wallRepairer');
         }
         
         
