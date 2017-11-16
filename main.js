@@ -6,8 +6,11 @@ var roleUpgrader = require('role.upgrader');
 var roleBuilder = require('role.builder');
 var roleRepairer = require('role.repairer');
 var roleWallRepairer = require('role.wallRepairer');
+var roleExplorer = require('role.explorer');
+var roleLorry = require('role.lorry');
 
 var debug = false;
+var target = "E2N1";
 
 
 module.exports.loop = function () { //Runs every tick
@@ -20,12 +23,26 @@ module.exports.loop = function () { //Runs every tick
         }
     }
     
-    var minimumNumberOfMiners = 7; //good
+    
+    var towers = Game.spawns['Spawn1'].room.find(FIND_STRUCTURES, {
+        filter: (s) => s.structureType == STRUCTURE_TOWER
+    });
+    for (let tower of towers) {
+        var target = tower.pos.findClosestByRange(FIND_HOSTILE_CREEPS);
+        if (target != undefined) {
+            tower.attack(target);
+        }
+    }
+    
+
+    var minimumNumberOfMiners = 4; //good
     var minimumNumberOfTransport = 3; //okay
-    var minimumNumberOfUpgraders = 4; //downsize?
-    var minimumNumberOfBuilders = 3; //okay
+    var minimumNumberOfUpgraders = 2; //downsize?
+    var minimumNumberOfBuilders = 0; //okay
     var minimumNumberOfRepairers = 2;
     var minimumNumberOfWallRepairers = 2;
+    var minimumNumberOfExplorers = 2;
+    var minimumNumberOfLorrys = 1;
     
     var numberOfMiners = _.sum(Game.creeps, (c) => c.memory.role == 'miner');
     var numberOfTransport = _.sum(Game.creeps, (c) => c.memory.role == 'transport');
@@ -34,6 +51,8 @@ module.exports.loop = function () { //Runs every tick
     var numberOfBuilders = _.sum(Game.creeps, (c) => c.memory.role == 'builder');
     var numberOfRepairers = _.sum(Game.creeps, (c) => c.memory.role == 'repairer');
     var numberOfWallRepairers = _.sum(Game.creeps, (c) => c.memory.role == 'wallRepairer');
+    var numberOfExplorers = _.sum(Game.creeps, (c) => c.memory.role == 'explorer');
+    var numberOfLorrys = _.sum(Game.creeps, (c) => c.memory.role == 'lorry');
     
     // Run for every spawned creep
     for(var name in Game.creeps) {
@@ -58,16 +77,23 @@ module.exports.loop = function () { //Runs every tick
         if(creep.memory.role == 'upgrader') {
             roleUpgrader.run(creep)
         }
+        
         if(creep.memory.role == 'builder')
         {
             roleBuilder.run(creep)
             
-        }
+        } 
         if(creep.memory.role == 'repairer'){
             roleRepairer.run(creep)
         }
         if(creep.memory.role == 'wallRepairer'){
             roleWallRepairer.run(creep)
+        }
+        if(creep.memory.role == 'explorer'){
+            roleExplorer.run(creep)
+        }
+        if(creep.memory.role == 'lorry'){
+            roleLorry.run(creep)
         }
 
         
@@ -93,7 +119,7 @@ module.exports.loop = function () { //Runs every tick
     if (Game.time % 5 == 0) {
         
         if (minimumNumberOfMiners > numberOfMiners) {
-            var numberOfWPos = _.sum(Game.creeps, (c) => c.memory.wPos == 0);
+            var numberOfWPos = _.sum(Game.creeps, (c) => c.memory.wPos == 0 && c.memory.role == 'miner');
             console.log("Not enough miners. Attempting to spawn Miner");
             name = Game.spawns['Spawn1'].createCustomCreepM(energy, 'miner', numberOfWPos);
         }
@@ -120,6 +146,14 @@ module.exports.loop = function () { //Runs every tick
         if (minimumNumberOfWallRepairers > numberOfWallRepairers) {
             console.log("Not enough wall repairers. Attempting to spawn Repairer");
             name = Game.spawns['Spawn1'].createCustomCreepU(energy, 'wallRepairer');
+        }
+        if (minimumNumberOfExplorers > numberOfExplorers){
+            console.log("Attempting to spawn explorer")
+            name = Game.spawns['Spawn1'].createCustomCreepH(energy, 'explorer', target)
+        }
+        if (minimumNumberOfLorrys > numberOfLorrys){
+            console.log("Attempting to spawn lorry")
+            name = Game.spawns['Spawn1'].createCustomCreepT(energy, 'lorry')
         }
         
         

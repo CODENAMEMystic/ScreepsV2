@@ -1,4 +1,4 @@
-var roleTransport = {
+var roleLorry = {
 
     /** @param {Creep} creep **/
     run: function(creep) {
@@ -12,26 +12,33 @@ var roleTransport = {
         }
         
 	    if(creep.memory.working == false) {
-	        creep.say('⚙')
-            var energy = creep.pos.findInRange(FIND_DROPPED_RESOURCES, 50);
-            if (energy.length) {
-               // console.log('found ' + energy[0].energy + ' energy at ', energy[0].pos);
-               creep.moveTo(energy[0]);
-               creep.pickup(energy[0]);
+	        creep.say('♲')
+            
+            
+            var structure = creep.pos.findClosestByPath(FIND_STRUCTURES, {
+                filter: (s) => (s.structureType == STRUCTURE_CONTAINER
+                            && s.store[RESOURCE_ENERGY] > 0
+            )}); 
+            
+            if (structure == undefined){
+                structure = creep.room.storage;
             }
+            
+            if(structure != undefined){
+                if(creep.withdraw(structure, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
+                    creep.moveTo(structure);
+                }
+            }
+            
             
             
         }
         else {
             
-               
-            var structure = creep.pos.findClosestByPath(FIND_STRUCTURES, {
-                filter: (s) => (s.structureType == STRUCTURE_CONTAINER
-                            && s.store[RESOURCE_ENERGY] < s.storeCapacity
-            )}); 
+                
             
-            /*
-            var structure = undefined;
+            
+            
             if(structure == undefined) {
             
                 structure = creep.pos.findClosestByPath(FIND_MY_STRUCTURES, {
@@ -41,16 +48,13 @@ var roleTransport = {
                 filter: (s) => (s.structureType == STRUCTURE_SPAWN
                              || s.structureType == STRUCTURE_EXTENSION
                              || s.structureType == STRUCTURE_TOWER)
-                             && s.energy < s.energyCapacity
+                             && s.energy+1 < s.energyCapacity
             });
             }
-            */
-            if(structure == undefined){
-                
-                structure = creep.room.storage;
-            }
             
-           
+            
+            
+            
             
             
             
@@ -68,4 +72,4 @@ var roleTransport = {
 	}
 };
 
-module.exports = roleTransport;
+module.exports = roleLorry;

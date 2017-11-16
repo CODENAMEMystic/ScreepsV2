@@ -42,16 +42,18 @@ module.exports = {
         }
         // if creep is supposed to harvest energy from source
         else {
-            var energy = creep.pos.findInRange(
-                FIND_DROPPED_RESOURCES,
-                50);
+            structure = creep.pos.findClosestByPath(FIND_STRUCTURES, {
+                    filter: (s) => (s.structureType == STRUCTURE_CONTAINER
+                                && s.store[RESOURCE_ENERGY] > 0
+                )});
+            if (structure != undefined) {
                 
-            if (energy.length) {
-                //console.log('found ' + energy[0].energy + ' energy at ', energy[0].pos);
-                //creep.say('Transport!')
-                creep.moveTo(energy[0]);
-                creep.pickup(energy[0]);
+                // try to transfer energy, if it is not in range
+                if(creep.withdraw(structure, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
+                creep.moveTo(structure)
+                    
                 }
+            }
         }
     }
 };
