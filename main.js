@@ -14,6 +14,10 @@ var target = "E2N1";
 
 
 module.exports.loop = function () { //Runs every tick
+    
+    if(Game.time % 100 == 0){
+        Game.notify("Energy in Storage: " + Game.rooms["E2N2"].storage.store[RESOURCE_ENERGY], 120)
+    }
 
     for (let name in Memory.creeps) {
         // and checking if the creep is still alive
@@ -34,7 +38,7 @@ module.exports.loop = function () { //Runs every tick
         }
     }
     
-
+    
     var minimumNumberOfMiners = 4; //good
     var minimumNumberOfTransport = 3; //okay
     var minimumNumberOfUpgraders = 2; //downsize?
