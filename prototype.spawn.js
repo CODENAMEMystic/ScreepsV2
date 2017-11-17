@@ -82,7 +82,7 @@ module.exports = function() {
             return this.createCreep(body, roleName + Game.time, {'role': roleName, 'working': false });
         };
     StructureSpawn.prototype.createCustomCreepH =
-        function(energy, roleName, target) {
+        function(energy, roleName) {
             // create a balanced body as big as possible with the given energy
             var numberOfParts = Math.floor(energy / 200);
             var body = [];
@@ -99,5 +99,6 @@ module.exports = function() {
             return this.createCreep(body, roleName + Game.time, {'role': roleName, 'working': false, 'home':'E2N2', 'target':'E2N1', 'sourceIndex':0
             });
         };
+        
         
 };
