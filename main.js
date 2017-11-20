@@ -43,7 +43,7 @@ module.exports.loop = function () { //Runs every tick
     var minimumNumberOfMiners = 4; //good
     var minimumNumberOfTransport = 3; //okay
     var minimumNumberOfUpgraders = 2; //downsize?
-    var minimumNumberOfBuilders = 0; //okay
+    var minimumNumberOfBuilders = 1; //okay
     var minimumNumberOfRepairers = 2;
     var minimumNumberOfWallRepairers = 2;
     var minimumNumberOfExplorers = 2;
@@ -61,18 +61,50 @@ module.exports.loop = function () { //Runs every tick
     var numberOfLorrys = _.sum(Game.creeps, (c) => c.memory.role == 'lorry');
     var numberOfReservers = _.sum(Game.creeps, (c) => c.memory.role == 'reserver');
     
+    
+    
+    var TimeCheck = (Game.time % 30 == 0)
+    if(TimeCheck){
+        console.log(Game.time)
+    }
+    var energy = Game.spawns["Spawn1"].room.energyAvailable;
+    var unnecEnergy = Game.spawns["Spawn1"].room.energyAvailable;
+    if (energy >= 600){
+        unnecEnergy = 600
+    }
+    var name = undefined;
+    var nearDeathInt = 90
+    
     // Run for every spawned creep
     for(var name in Game.creeps) {
         var creep = Game.creeps[name];
 //------------Role Statements--------------------        
         //if creeps role is miner
         
-        if(creep.memory.role == 'miner') {
+        if(creep.memory.role == 'miner')
+        {
             roleMiner.run(creep)
+            if(TimeCheck)
+            {
+                if(creep.ticksToLive < nearDeathInt)
+                {
+                    var numberOfWPos = _.sum(Game.creeps, (c) => c.memory.wPos == 0 && c.memory.role == 'miner');
+                    console.log("A Miner is about to die! "+ creep.ticksToLive);
+                    name = Game.spawns['Spawn1'].createCustomCreepM(energy, 'miner', numberOfWPos);
+                }
+            }
         }
-        //if creeps role is transport
-        if(creep.memory.role == 'transport') {
+        if(creep.memory.role == 'transport')
+        {
             roleTransport.run(creep)
+            if(TimeCheck)
+            {
+                if(creep.ticksToLive < nearDeathInt)
+                {
+                    console.log("A transport is about to die! "+creep.ticksToLive)
+                    name = Game.spawns['Spawn1'].createCustomCreepT(energy, 'transport');
+                }
+            }
         }
         if(creep.memory.role == 'recovery') {
             roleRecovery.run(creep)
@@ -81,44 +113,98 @@ module.exports.loop = function () { //Runs every tick
                 creep.suicide();
             }
         }
-        if(creep.memory.role == 'upgrader') {
+        if(creep.memory.role == 'upgrader')
+        {
             roleUpgrader.run(creep)
+            if(TimeCheck)
+            {
+                if(creep.ticksToLive < nearDeathInt)
+                {
+                    console.log("A Upgrader is about to die! "+ creep.ticksToLive)
+                    name = Game.spawns['Spawn1'].createCustomCreepU(energy, 'upgrader');
+                }
+            }
         }
         
         if(creep.memory.role == 'builder')
         {
             roleBuilder.run(creep)
+            if(TimeCheck)
+            {
+                if(creep.ticksToLive < nearDeathInt)
+                {
+                    console.log("A Builder is about to die! "+creep.ticksToLive)
+                    name = Game.spawns['Spawn1'].createCustomCreepB(energy, 'builder');
+                }
+            }
             
         } 
-        if(creep.memory.role == 'repairer'){
+        if(creep.memory.role == 'repairer')
+        {
             roleRepairer.run(creep)
+            if(TimeCheck)
+            {
+                if(creep.ticksToLive < nearDeathInt)
+                {
+                    console.log("A Repairer is about to die! "+creep.ticksToLive)
+                    name = Game.spawns['Spawn1'].createCustomCreepU(unnecEnergy, 'repairer');
+                }
+            }
+            
         }
-        if(creep.memory.role == 'wallRepairer'){
+        if(creep.memory.role == 'wallRepairer')
+        {
             roleWallRepairer.run(creep)
+            if(TimeCheck)
+            {
+                if(creep.ticksToLive < nearDeathInt)
+                {
+                    console.log("A Wall Repairer is about to die! "+ creep.ticksToLive)
+                    name = Game.spawns['Spawn1'].createCustomCreepU(unnecEnergy, 'wallRepairer');
+                }
+            }
         }
-        if(creep.memory.role == 'explorer'){
+        if(creep.memory.role == 'explorer')
+        {
             roleExplorer.run(creep)
+            if(TimeCheck)
+            {
+                if(creep.ticksToLive < nearDeathInt)
+                {
+                    console.log("A Explorer is about to die! "+ creep.ticksToLive)
+                    name = Game.spawns['Spawn1'].createCustomCreepH(energy, 'explorer', target)
+                }
+            }
         }
-        if(creep.memory.role == 'lorry'){
+        if(creep.memory.role == 'lorry')
+        {
             roleLorry.run(creep)
+            if(TimeCheck)
+            {
+                if(creep.ticksToLive < nearDeathInt)
+                {
+                    console.log("A Lorry is about to die! "+ creep.ticksToLive)
+                    name = Game.spawns['Spawn1'].createCustomCreepT(energy, 'lorry')
+                }
+            }
         }
-        if(creep.memory.role == 'reserver'){
+        if(creep.memory.role == 'reserver')
+        {
             roleReserver.run(creep)
+            if(TimeCheck)
+            {
+                if(creep.ticksToLive < nearDeathInt)
+                {
+                    console.log("A Reserver is about to die! " + creep.ticksToLive)
+                    name = Game.spawns['Spawn1'].spawnCreep([CLAIM, CLAIM, MOVE, MOVE], 'Reserver' + Game.time, {memory: {'role': 'reserver', 'home':'E2N2', 'target':'E2N1'}})
+                }
+            }
         }
-
-        
-
-        
     }
     
     
     
-    var energy = Game.spawns["Spawn1"].room.energyAvailable;
-    var unnecEnergy = Game.spawns["Spawn1"].room.energyAvailable;
-    if (energy >= 600){
-        unnecEnergy = 600
-    }
-    var name = undefined;
+    
     
     if (numberOfRecovery < 3 && (numberOfMiners == 0 || numberOfTransport == 0))
     {
@@ -132,7 +218,12 @@ module.exports.loop = function () { //Runs every tick
     
     //Check every 5 ticks
     
-    if (Game.time % 10 == 0) {
+    if (Game.time % 100 == 0) {
+        
+        
+        
+        
+        
         
         if (minimumNumberOfMiners > numberOfMiners) {
             var numberOfWPos = _.sum(Game.creeps, (c) => c.memory.wPos == 0 && c.memory.role == 'miner');
@@ -153,7 +244,6 @@ module.exports.loop = function () { //Runs every tick
         if (minimumNumberOfBuilders > numberOfBuilders) {
             console.log("Not enough builders. Attempting to spawn builder");
             name = Game.spawns['Spawn1'].createCustomCreepB(energy, 'builder');
-            
         }
         if (minimumNumberOfRepairers > numberOfRepairers) {
             console.log("Not enough repairers. Attempting to spawn Repairer");
@@ -171,11 +261,12 @@ module.exports.loop = function () { //Runs every tick
             console.log("Attempting to spawn lorry")
             name = Game.spawns['Spawn1'].createCustomCreepT(energy, 'lorry')
         }
+        
     }
     if (Game.time % 20 == 0){
         if (minimumNumberOfReservers > numberOfReservers){
             console.log("Attempting to spawn reserver")
-            name = Game.spawns['Spawn1'].spawnCreep([CLAIM, CLAIM, MOVE, MOVE], 'Reserver' + Game.time, {'role': roleName, 'home':'E2N2', 'target':'E2N1'})
+            name = Game.spawns['Spawn1'].spawnCreep([CLAIM, CLAIM, MOVE, MOVE], 'Reserver' + Game.time, {memory: {'role': 'reserver', 'home':'E2N2', 'target':'E2N1'}})
         }
         
     }

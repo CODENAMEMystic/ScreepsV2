@@ -34,6 +34,9 @@ module.exports = {
                     filter: (s) => (s.structureType == STRUCTURE_CONTAINER
                                 && s.store[RESOURCE_ENERGY] > 0
                 )});
+            if (structure == undefined){
+                structure = creep.room.storage;
+            }
             if (structure != undefined) {
                 
                 // try to transfer energy, if it is not in range
